@@ -1,0 +1,94 @@
+Napify Service - Executable Deployment Instructions
+=================================================
+
+This guide describes how to deploy the Napify Service as a standalone executable
+on a Windows device that does NOT have Python installed, using the 'sc' command for
+service management.
+
+Files Provided:
+- dist\napify_service.exe: The standalone executable service
+- DEPLOY_EXE_INSTRUCTIONS.txt: This file
+
+Prerequisites on Target Device:
+1. Windows Vista or later (the executable is built for Windows)
+2. Administrator privileges for service installation
+3. The executable must be placed in a permanent directory (e.g., C:\NapifyService\)
+4. Napify.exe must be present in the same directory as the service executable
+
+Service Functionality:
+- Monitors for system events: Sleep, Hibernate, Shutdown, Logout
+- When any of these events is detected, the service launches Napify.exe
+- Napify.exe is expected to run for about 7 seconds and block keyboard inputs
+- The service does not delay the system event; it runs Napify.exe concurrently
+- Note: Due to limitations in user-mode services, the service cannot delay system events
+  (sleep/hibernate/shutdown/logout) but will run Napify.exe upon detection.
+
+Deployment Steps:
+
+1. COPY THE EXECUTABLES TO THE TARGET DEVICE
+   - Create a directory for the service (e.g., C:\NapifyService\)
+   - Copy napify_service.exe and Napify.exe from the dist folder to this directory
+   - Example:
+     mkdir C:\NapifyService\
+     copy napify_service.exe C:\NapifyService\
+     copy Napify.exe C:\NapifyService\
+
+2. INSTALL THE SERVICE USING 'sc' COMMAND
+   - Open Command Prompt AS ADMINISTRATOR
+   - Navigate to the directory containing the executable (or use full path)
+   - Run the following command to create the service:
+     sc create NapifyService binPath= "C:\NapifyService\napify_service.exe" start= auto
+     IMPORTANT: Note the space after the equals sign (=) in binPath and start parameters.
+
+   - You should see: [SC] CreateService SUCCESS
+
+3. START THE SERVICE
+   - In the same admin Command Prompt, run:
+     sc start NapifyService
+   - You should see:
+     [SC] StartService SUCCESS
+     or
+     [SC] StartService: SERVICE_START_PENDING followed by [SC] StartService SUCCESS
+
+4. VERIFY THE SERVICE IS RUNNING
+   - Check the log file: C:\ProgramData\Napify\Logs\napify_service.log
+   - You should see entries when system events occur, indicating that Napify.exe was launched.
+
+5. SERVICE MANAGEMENT COMMANDS (AS ADMINISTRATOR):
+   - Check status:   sc query NapifyService
+   - Stop service:   sc stop NapifyService
+   - Pause service:  sc pause NapifyService
+   - Continue service: sc continue NapifyService
+   - Remove service: sc delete NapifyService
+
+6. IMPORTANT NOTES:
+   - The service runs under the Local System account by default (has access to C:\ProgramData)
+   - Log file location: C:\ProgramData\Napify\Logs\napify_service.log
+   - If the Napify directory cannot be created due to permissions, the service will fall back to:
+     %TEMP%\napify_service.log (check the service's environment for TEMP path)
+   - No Python installation is required on the target device
+   - The executable contains all necessary dependencies (including pywin32 and ctypes)
+   - Service starts automatically with the system (due to start= auto in sc create)
+   - Napify.exe must be in the same directory as the service executable
+
+7. TROUBLESHOOTING:
+   - If service fails to start, check the Windows Event Viewer for application/system logs
+   - Verify the executable paths in the sc create command are correct and accessible
+   - Ensure the Local System account has write permissions to C:\ProgramData\Napify\Logs
+   - To test the executable directly (not as a service):
+       C:\NapifyService\napify_service.exe
+     Note: Running directly will attempt to start as a service and may show an error if not run in service context - this is normal.
+
+8. FILE LOCATIONS:
+   - Executable: C:\NapifyService\napify_service.exe (or your chosen location)
+   - Napify.exe: C:\NapifyService\Napify.exe (must be in same directory)
+   - Log file: C:\ProgramData\Napify\Logs\napify_service.log
+   - Service registry key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NapifyService
+
+9. UNINSTALLING:
+   - Stop the service: sc stop NapifyService
+   - Delete the service: sc delete NapifyService
+   - Delete the executable directory: rmdir /s /q C:\NapifyService\
+
+This deployment method uses only the 'sc' command for service management as requested,
+and requires no Python installation on the target device.

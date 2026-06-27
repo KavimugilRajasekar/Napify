@@ -1,0 +1,67 @@
+Napify Service - Deployment Instructions
+======================================
+
+Prerequisites:
+1. Python 3.x installed on the Windows machine
+2. pywin32 package installed: `pip install pywin32`
+3. Administrator privileges for installation/removal
+4. Napify.exe must be present in the same directory as the service script
+
+Files:
+- napify_service.py: The Windows service implementation
+- DEPLOY_INSTRUCTIONS.txt: This file
+- DEPLOY_EXE_INSTRUCTIONS.txt: For deploying as executable on non-Python devices
+- Napify.exe: The application to run when system events are detected (must be in same directory)
+
+Service Functionality:
+- Monitors for system events: Sleep, Hibernate, Shutdown, Logout
+- When any of these events is detected, the service launches Napify.exe
+- Napify.exe is expected to run for about 7 seconds and block keyboard inputs
+- The service does not delay the system event; it runs Napify.exe concurrently
+- Note: Due to limitations in user-mode services, the service cannot delay system events
+  (sleep/hibernate/shutdown/logout) but will run Napify.exe upon detection.
+
+Deployment Steps:
+
+1. OPEN COMMAND PROMPT AS ADMINISTRATOR
+   - Right-click on Command Prompt and select "Run as administrator"
+
+2. NAVIGATE TO THE SERVICE DIRECTORY
+   - cd C:\Users\kavim\OneDrive\Desktop\Napify\Napify_Service
+   - (or wherever you placed the files)
+
+3. ENSURE NAPIFY.EXE IS PRESENT
+   - Copy Napify.exe to the same directory as napify_service.py
+
+4. INSTALL THE SERVICE
+   - python napify_service.py install
+   - You should see: "Service installed successfully"
+
+5. START THE SERVICE
+   - python napify_service.py start
+   - You should see: "Service started successfully"
+
+6. VERIFY THE SERVICE IS RUNNING
+   - Check the log file: C:\ProgramData\Napify\Logs\napify_service.log
+   - You should see entries when system events occur, indicating that Napify.exe was launched.
+
+7. STOP THE SERVICE (when needed)
+   - python napify_service.py stop
+   - You should see: "Service stopped successfully"
+
+8. REMOVE THE SERVICE (when needed)
+   - python napify_service.py remove
+   - You should see: "Service removed successfully"
+
+Important Notes:
+- The service runs in the background without any UI or console window
+- Log file location: C:\ProgramData\Napify\Logs\napify_service.log
+- If the ProgramData directory is not accessible, the service will fall back to the system TEMP directory
+- The service logs a message when system events are detected and Napify.exe is launched
+- No 'sc' command was used in these instructions - all operations are performed via the Python service script
+
+Troubleshooting:
+- If installation fails, ensure you're running CMD as Administrator
+- If the log file isn't being written, check directory permissions for the service account
+- To view service status in Windows Services manager: services.msc
+- The service will appear as "Napify Service" in the Services list

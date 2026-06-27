@@ -1,0 +1,66 @@
+Troubleshooting Guide for Napify Service
+=======================================
+
+Problem: "Error starting service: The specified service does not exist as an installed service."
+
+This error occurs when you try to start a service that hasn't been installed yet, or the installation failed.
+
+Solutions:
+
+1. **INSTALL THE SERVICE FIRST**
+   - You MUST install the service before starting it
+   - Run: `python napify_service.py install`
+   - Wait for "Service installed successfully" message
+   - ONLY THEN run: `python napify_service.py start`
+
+2. **RUN COMMAND PROMPT AS ADMINISTRATOR**
+   - Right-click on Command Prompt shortcut
+   - Select "Run as administrator"
+   - Installation/removal requires admin privileges
+
+3. **VERIFY INSTALLATION WORKED**
+   - After running the install command, you should see:
+     "Service installed successfully"
+   - If you see an error during installation, address that first
+
+4. **COMMON INSTALLATION ERRORS & FIXES:**
+
+   A. "Access is denied" or permission errors:
+      - You are NOT running CMD as Administrator
+      - Solution: Close CMD and reopen as Administrator
+
+   B. "The system cannot find the file specified":
+      - You are not in the correct directory
+      - Solution: Navigate to the directory containing napify_service.py
+        Example: `cd C:\Users\kavim\OneDrive\Desktop\Napify\Napify_Service`
+
+   C. "ModuleNotFoundError: No module named 'win32serviceutil'"
+      - pywin32 is not installed
+      - Solution: Install pywin32 first: `pip install pywin32`
+      - Then retry the service installation
+
+   D. Service installs but immediately stops:
+      - Check the log file for errors
+      - Log file location: C:\ProgramData\Napify\Logs\napify_service.log
+      - If the directory can't be created, check permissions on C:\ProgramData
+
+5. **VERIFY SERVICE EXISTS AFTER INSTALLATION**
+   - After successful installation, you can verify by:
+     a) Looking in Windows Services manager (services.msc) for "Napify Service"
+     b) Or trying to stop it: `python napify_service.py stop` (should say "Service stopped successfully" if it was running)
+
+6. **CORRECT SEQUENCE OF COMMANDS (AS ADMINISTRATOR):**
+   ```
+   cd C:\Users\kavim\OneDrive\Desktop\Napify\Napify_Service
+   python napify_service.py install
+   python napify_service.py start
+   ```
+
+7. **IF YOU STILL HAVE ISSUES:**
+   - Uninstall first (if partially installed): `python napify_service.py remove`
+   - Then try the full sequence again
+   - Check that you have write permissions to C:\ProgramData\Napify\Logs
+   - Consider running the service script directly to see if there are Python errors:
+     `python napify_service.py debug` (this runs it in console mode for testing)
+
+Remember: The service WILL NOT start if it hasn't been installed first. The install command creates the service entry in the Windows Service Control Manager.

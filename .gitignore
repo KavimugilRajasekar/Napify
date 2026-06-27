@@ -1,0 +1,202 @@
+# ============================================================
+# Napify — Global .gitignore
+# ============================================================
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django / Flask / FastAPI stuff (not used but kept safe)
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Jupyter
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy / linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Cython debug symbols
+cython_debug/
+
+# ---------- PyInstaller ----------
+# PyInstaller produces these in the project root during a build
+Napify/*.manifest
+Napify_Service/*.manifest
+
+# Build artifacts (uncomment if you don't want to track .spec files)
+# Keep .spec files tracked — they encode the build configuration
+
+# ---------- Windows ----------
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# ---------- macOS ----------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# ---------- Linux ----------
+*~
+.fuse_hidden*
+.Trash-*
+.nfs*
+
+# ---------- IDEs / Editors ----------
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Emacs
+.vim/
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+.\#*
+\#*\#
+*\#
+
+# ---------- Logs ----------
+logs/
+*.log
+*.log.*
+napify_service.log
+
+# ---------- Project-specific ----------
+# Service log directory on Windows (runtime-created, not source)
+# Listed here as documentation — these live outside the repo at runtime
+#   C:\ProgramData\Napify\Logs\
+
+# Local environment overrides
+.env
+.env.local
+.env.*.local
+
+# Temporary / scratch files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.rej
+*.patch
+
+# OS-specific temp files
+~$*
+*.tmp
+
+# ============================================================
+# Notes:
+#   - `dist/` is intentionally NOT ignored here so that built
+#     executables can be committed if desired (release artifacts).
+#     Add `dist/` to your local .gitignore if you prefer not to
+#     track built binaries.
+#   - `.claude/` is intentionally NOT ignored (per-project
+#     Claude Code configuration is committed).
+# ============================================================
